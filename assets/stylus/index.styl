@@ -1,0 +1,88 @@
+@font-face
+	font-family GothamNarrowLight
+	font-style normal
+	src url(../fonts/gotham-light.otf) format("opentype")
+	font-smoothing antialiased !important
+	text-rendering optimizeLegibility
+	
+*
+	font-family GothamNarrowLight
+	font-size 15px
+
+.loginBlock
+	display flex
+	flex-direction column
+	justify-content center
+	align-items center
+
+p
+	color #FFF
+
+p.title
+	margin 25px auto 0 auto
+	width 170px
+
+p.error
+	margin 5px auto 5px auto
+	width 175px
+	height 10px
+	color #e74c3c
+
+p.emailEnd
+	position absolute
+	right 30px
+	top 205px
+
+.top-frame
+	position relative
+	height 25px
+	background-color #32343F
+	a.close
+		color #777
+		height 100%
+		position absolute
+		font-size 17px
+		right 10px
+		text-decoration none
+		top 3px
+		cursor default
+		&:after
+			content 'x'
+	a.minimize
+		color #777
+		height 100%
+		position absolute
+		font-size 30px
+		right 30px
+		text-decoration none
+		top -4px
+		cursor default
+		&:after
+			content '-'
+
+.logWindow
+	overflow-y scroll
+	overflow-x hidden
+	border-top-style solid
+	border-top-width 1px
+	border-top-color #D0CFCF
+	position absolute
+	bottom 0
+	left 0
+	width 100%
+	height 150px
+	background-color #32343F
+	p
+		-webkit-app-region no-drag
+		margin 0
+		padding 0 5px
+		
+input
+	-webkit-app-region no-drag
+	
+html
+	overflow hidden
+	background-color #2D2F39
+	body
+		margin 0
+		-webkit-app-region drag

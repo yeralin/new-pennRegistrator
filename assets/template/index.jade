@@ -1,0 +1,26 @@
+html
+	head
+		script(src='./public/js/app.js')
+		link(rel='stylesheet', href='./public/css/index.css')
+	body
+		.top-frame
+			a.close(href="#")
+			a.minimize(href="#")
+		p.title Penn State Registrator
+		p.error 
+		.loginBlock
+			span.psu-id
+				input#psuid.clean-slide(type="text", name="psu-id", onkeypress="return searchKeyPress(event);")
+				label PSU ID:
+			span.psu-pass
+				input#psupass.clean-slide(type="password", name="psu-pass", onkeypress="return searchKeyPress(event);")
+				label Password:
+			span.email
+				input#email.clean-slide(type="text", name="email", onkeypress="return searchKeyPress(event);")
+				label Email:
+			p.emailEnd @mail.com
+			span.email-pass
+				input#pass.clean-slide(type="password", name="email-pass", onkeypress="return searchKeyPress(event);")
+				label Password:
+			button.button.action-button.animate(data-label="Submit", onclick="startListening()")
+		.logWindow

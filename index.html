@@ -1,0 +1,25 @@
+
+<html>
+  <head>
+    <script src="./public/js/app.js"></script>
+    <link rel="stylesheet" href="./public/css/index.css"/>
+  </head>
+  <body>
+    <div class="top-frame"><a href="#" class="close"></a><a href="#" class="minimize"></a></div>
+    <p class="title">Penn State Registrator</p>
+    <p class="error"> </p>
+    <div class="loginBlock"><span class="psu-id">
+        <input id="psuid" type="text" name="psu-id" onkeypress="return searchKeyPress(event);" class="clean-slide"/>
+        <label>PSU ID:</label></span><span class="psu-pass">
+        <input id="psupass" type="password" name="psu-pass" onkeypress="return searchKeyPress(event);" class="clean-slide"/>
+        <label>Password:</label></span><span class="email">
+        <input id="email" type="text" name="email" onkeypress="return searchKeyPress(event);" class="clean-slide"/>
+        <label>Email:</label></span>
+      <p class="emailEnd">@mail.com</p><span class="email-pass">
+        <input id="pass" type="password" name="email-pass" onkeypress="return searchKeyPress(event);" class="clean-slide"/>
+        <label>Password:</label></span>
+      <button data-label="Submit" onclick="startListening()" class="button action-button animate"></button>
+    </div>
+    <div class="logWindow"></div>
+  </body>
+</html>
