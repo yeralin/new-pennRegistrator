@@ -26,7 +26,7 @@ gulp.task('jade', function() {
 gulp.task('js', function() {
     gulp.src(['./assets/js/*.js'])
         .pipe(concat('app.js'))
-        .pipe(gulp.dest('./public/js/'));
+        .pipe(gulp.dest('./public/js'));
 });
 
 function styl() {

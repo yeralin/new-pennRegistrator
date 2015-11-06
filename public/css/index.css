@@ -59,9 +59,16 @@ p.emailEnd {
 }
 
 .top-frame {
+  -webkit-app-region: no-drag;
   position: relative;
   height: 25px;
   background-color: #32343f;
+}
+
+.top-frame .dragable {
+  height: 100%;
+  width: 88%;
+  -webkit-app-region: drag;
 }
 
 .top-frame a.close {
@@ -114,7 +121,8 @@ p.emailEnd {
 }
 
 .logWindow p,
-input {
+input,
+button {
   -webkit-app-region: no-drag;
 }
 

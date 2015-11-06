@@ -7,7 +7,7 @@ var MailListener = require("mail-listener2"),
     email = "",
     pass = "",
     button = "",
-    mailListener;
+    mailListener = "";
 
 
 var startMailListener = function() {

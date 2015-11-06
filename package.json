@@ -1,20 +1,7 @@
 {
   "name": "psr",
   "description": "Penn State Registrator",
-  "main": "index.html",
-  "window": {
-    "title": "Penn State Registrator",
-    "icon": "link.png",
-    "frame": false,
-    "toolbar": false,
-    "width": 450,
-    "height": 520,
-    "resizable": false,
-    "position": "center"
-  },
-  "webkit": {
-    "plugin": true
-  },
+  "main": "start.js",
   "dependencies": {
     "es": "^0.4.5",
     "event-stream": "^3.3.2",
@@ -30,8 +17,6 @@
     "gulp-stylus": "^2.0.6",
     "mail-listener2": "^0.1.8",
     "merge-stream": "^1.0.0",
-    "nib": "^1.1.0",
-    "nightmare": "^2.0.7",
-    "vo": "^1.0.3"
+    "nib": "^1.1.0"
   }
 }
