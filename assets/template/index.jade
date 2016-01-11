@@ -23,5 +23,16 @@ html
 			span.email-pass
 				input#pass.clean-slide(type="password", name="email-pass", onkeypress="return searchKeyPress(event);")
 				label Password:
+			.semester
+				p.label Semester: 
+				.radio
+					p 1
+					input(type="radio", name="semester", value="1")
+				.radio
+					p 2
+					input(type="radio", name="semester", value="2")
+				.radio
+					p 3
+					input(type="radio", name="semester", value="3")
 			button.button.action-button.animate(data-label="Submit", onclick="startListening()")
 		.logWindow

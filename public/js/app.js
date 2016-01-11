@@ -1,58 +1,26 @@
-var remote = require('remote');
-var BrowserWindow = remote.require('browser-window');
+var remote = require('remote'),
+BrowserWindow = remote.require('browser-window'),
+fs = require('fs');
 
-document.onreadystatechange = function () {
-   document.querySelector(".minimize").addEventListener("click", function(){
-       var window = remote.getCurrentWindow();
-       window.minimize(); 
-  });
+document.onreadystatechange = function() {
+    document.querySelector(".minimize").addEventListener("click", function() {
+        var window = remote.getCurrentWindow();
+        window.minimize();
+    });
 
-  document.querySelector(".close").addEventListener("click", function(){
-       var window = remote.getCurrentWindow();
-       window.close();
-       app.quit();
-  }); 
-}
-
-var win = new BrowserWindow({ width: 500, height: 500, show: false });
-win.on('closed', function() {
-  win = null;
-});
-var state  = 1;
-win.loadUrl('https://elionvw.ais.psu.edu/cgi-bin/elion-student.exe/submit/goRegistration');
-win.webContents.on('did-finish-load', function() {
-    switch(state){
-    	case 1:
-    		console.log(win.webContents.getUrl());
-    		win.webContents.executeJavaScript("document.querySelector('#login').value = 'dmy139';");
-	    	win.webContents.executeJavaScript("document.querySelector('#password').value = '14563258963d';");
-	    	win.webContents.executeJavaScript("document.querySelector('input[type=\"submit\"]').click()");
-	    	state++;
-    		break;
-    	case 2:
-    		console.log(win.webContents.getUrl());
-	    	win.webContents.executeJavaScript("document.querySelector('input[id=\"radio1 @ 2\"]').click()");
-	    	win.webContents.executeJavaScript("document.querySelector('input[type=\"SUBMIT\"]').click()");
-	    	state ++;
-	    	break;
-	    case 3:
-	    	console.log(win.webContents.getUrl());
-			win.webContents.executeJavaScript("document.querySelector('input[type=\"password\"]').value = '14563258963d';");
-    		win.webContents.executeJavaScript("document.querySelector('input[type=\"SUBMIT\"]').click()");
-    		state ++;
-    	default:
-    		break;
-    }
-});
-win.show();
+    document.querySelector(".close").addEventListener("click", function() {
+        var window = remote.getCurrentWindow();
+        window.close();
+        app.quit();
+    });
+};
 var MailListener = require("mail-listener2"),
-    Nightmare = require('nightmare'),
-    vo = require('vo'),
     courseNum = "",
     psuid = "",
     psupass = "",
     email = "",
     pass = "",
+    semester = "",
     button = "",
     mailListener = "";
 
@@ -84,7 +52,7 @@ var startMailListener = function() {
         constructLog("Started listening for courses...", "mail")
         console.log("Connected to email server");
         document.querySelector(".button").removeAttribute('disabled');
-        
+
     });
 
     mailListener.on("server:disconnected", function() {
@@ -101,7 +69,6 @@ var startMailListener = function() {
     mailListener.on("mail", function(mail, seqno, attributes) {
         if ((Date.parse(mail.receivedDate) + 300000) > Date.parse(Date()) && mail["subject"] === "Watch List Notice") {
             courseNum = mail["text"].substring(mail["text"].indexOf('(') + 1, mail["text"].indexOf(')'));
-            console.log('Found course number: ' + courseNum);
             startRegister();
         }
     });
@@ -109,66 +76,110 @@ var startMailListener = function() {
 };
 
 var startRegister = function() {
+    var state = 1;
+    var win = new BrowserWindow({
+        width: 1600,
+        height: 900,
+        show: false
+    });
+    win.on('closed', function() {
+        win = null;
+    });
 
-    vo(function * () {
-        constructLog("Found course number " + courseNum + ". Registering...", "register");
-        var nightmare = Nightmare({
-            show: true
+    constructLog("Found course number: " + courseNum, "register");
+    constructLog("Registration started...", "register");
+    win.webContents.session.cookies.remove({
+            url: "https://elionvw.ais.psu.edu/cgi-bin/elion-student.exe/submit/goRegistration",
+            name: "pageKey"
+        },
+        function(error) {
+            if (error) throw error;
         });
-        var elementPresent = function() {
-            var confirm = document.querySelector(".confirm");
-            var urgent = document.querySelector(".urgent")
-            return (confirm ? true : false || urgent ? true : false);
-        };
-        var link = yield nightmare
-        var link = yield nightmare
-            .goto('https://elionvw.ais.psu.edu/cgi-bin/elion-student.exe/submit/goRegistration')
-            .type('#login', psuid)
-            .type('#password', psupass)
-            .click('input[type="submit"]')
-            .wait("input[id='radio1 @ 2']")
-            .click("input[id='radio1 @ 2']")
-            .click('input[type="SUBMIT"]')
-            .wait("input[type='password']")
-            .type("input[type='password']", psupass)
-            .click('input[type="SUBMIT"]')
-            .wait("input[value='']")
-            .type("input[value='']", courseNum)
-            .click("input[value='Add course to schedule']")
-            .wait(elementPresent)
-            .exists(".confirm");
-
-        if (link) {
-            constructLog("Successfully scheduled class " + courseNum, "register");
-            yield nightmare.end();
-
-        } else {
-            constructLog("Class was not registered. Something went wrong, taking screenshoot...", "register");
-            yield nightmare.screenshot("error " + Date() + ".png");
-            constructLog("Screenshoot is in the program's folder", "register");
-            yield nightmare.end();
+    win.webContents.session.cookies.remove({
+            url: "https://elionvw.ais.psu.edu/cgi-bin/elion-student.exe/submit/goRegistration",
+            name: "sessionKey"
+        },
+        function(error) {
+            if (error) throw error;
+        });
+    win.loadUrl('https://elionvw.ais.psu.edu/cgi-bin/elion-student.exe/submit/goRegistration');
+    win.webContents.on('did-finish-load', function() {
+        if (win.webContents.getTitle() == "Penn State WebAccess Secure Login: Authentication Required") {
+            constructLog("Wrong PSU Login/Password", "PSU Auth");
+            win.capturePage(function handleCapture(img) {
+                fs.writeFile("./screenshots/error.png", img.toPng(), function(err) {
+                    if (err) {
+                        return console.log(err);
+                    }
+                    constructLog("Error screenshot taken, stored in program's folder", "general");
+                });
+            });
+            win.close();
+            return;
         }
-
-        return link;
-    })(function(err) {
-        if (err) return console.log(err);
+        if (state === 5) {
+            constructLog("Task is done", "register")
+           win.capturePage(function handleCapture(img) {
+                fs.writeFile("./screenshots/registration.png", img.toPng(), function(err) {
+                    if (err) {
+                        return console.log(err);
+                    }
+                    constructLog("Registration screenshot taken, stored in program's folder", "general");
+                });
+            });
+            win.close();
+            return;
+        }
+        switch (state) {
+            case 1:
+                console.log(win.webContents.getTitle());
+                win.webContents.executeJavaScript("document.querySelector('#login').value = '" + psuid + "';");
+                win.webContents.executeJavaScript("document.querySelector('#password').value = '" + psupass + "';");
+                win.webContents.executeJavaScript("document.querySelector('input[type=\"submit\"]').click()");
+                state++;
+                break;
+            case 2:
+                console.log(win.webContents.getTitle());
+                win.webContents.executeJavaScript("document.querySelector('input[id=\"radio1 @ " + semester + "\"]').click()");
+                win.webContents.executeJavaScript("document.querySelector('input[type=\"SUBMIT\"]').click()");
+                state++;
+                break;
+            case 3:
+                console.log(win.webContents.getTitle());
+                win.webContents.executeJavaScript("document.querySelector('input[type=\"password\"]').value = '" + psupass + "';");
+                win.webContents.executeJavaScript("document.querySelector('input[type=\"SUBMIT\"]').click()");
+                state++;
+                break;
+            case 4:
+                console.log(win.webContents.getTitle());
+                win.webContents.executeJavaScript("document.querySelector('input[value=\"\"]').value = '" + courseNum + "';");
+                win.webContents.executeJavaScript("document.querySelector('input[value=\"Add course to schedule\"]').click()");
+                state++;
+                break;
+            default:
+                break;
+        }
     });
 
 };
 
 var startListening = function() {
+
     psuid = document.querySelector("#psuid").value,
-    psupass = document.querySelector("#psupass").value,
-    email = document.querySelector("#email").value,
-    pass = document.querySelector("#pass").value,
-    button = document.querySelector(".button");
+        psupass = document.querySelector("#psupass").value,
+        email = document.querySelector("#email").value,
+        pass = document.querySelector("#pass").value,
+        button = document.querySelector(".button");
+    if (document.querySelector('input[name="semester"]:checked') != null) {
+        semester = document.querySelector('input[name="semester"]:checked').value;
+    }
     if (button.classList.contains("stop")) {
         buttonState("restore");
         mailListener.stop();
         var logWindow = document.querySelector(".logWindow");
         logWindow.innerHTML = "";
     } else {
-        if (psuid === "" || psupass === "" || email === "" || pass === "") {
+        if (psuid === "" || psupass === "" || email === "" || pass === "" || semester === "") {
             buttonState("error");
         } else {
             buttonState("stop");
@@ -226,40 +237,71 @@ var testMailConnection = function(callback) {
 };
 
 var testPennStateAccount = function(callback) {
-    vo(function * () {
-        constructLog("Started PSU Auth testing...", "general");
-        var nightmare = Nightmare({
-            show: false
-        });
-        var link = yield nightmare
-            .goto('https://webaccess.psu.edu/')
-            .type('#login', psuid)
-            .type('#password', psupass)
-            .click('input[type="submit"]')
-            .wait("#alert")
-            .exists("#access-links-logout");
-
-        if (link) {
-            constructLog("Successfully logged in", "PSU Auth")
-            constructLog("Tests passed", "PSU Auth")
-            yield nightmare.end();
-            callback();
-
-        } else {
-            buttonState("restore");
-            constructLog("Account test failed, check you Penn State Accound credentials.", "PSU Auth");
-            constructLog("Taking screenshoot...", "PSU Auth")
-            yield nightmare.screenshot("error " + Date() + ".png");
-            constructLog("Screenshoot is in the program's folder", "PSU Auth");
-            yield nightmare.end();
-        }
-
-        return link;
-    })(function(err, result) {
-        if (err) return console.log(err);
-        
+    var state = 1;
+    var win = new BrowserWindow({
+        show: false
+    });
+    win.on('closed', function() {
+        win = null;
     });
 
+    constructLog("Started PSU Auth testing...", "general");
+    win.loadUrl('https://elionvw.ais.psu.edu/cgi-bin/elion-student.exe/submit/goRegistration');
+    win.webContents.on('did-finish-load', function() {
+        if (win.webContents.getTitle() == "Penn State WebAccess Secure Login: Authentication Required") {
+            constructLog("Account test failed", "PSU Auth");
+            constructLog("Wrong PSU Login/Password", "PSU Auth");
+            win.capturePage(function handleCapture(img) {
+              fs.writeFile("./error.png", img.toPng(), function(err){
+                if(err) {
+                        return console.log(err);
+                    }
+                    constructLog("Error screenshot taken, stored in program's folder", "general");
+              });
+            });
+            buttonState("restore");
+            win.close();
+            return;
+        }
+        else if(win.webContents.getTitle() !=  "Re-enter Password to Continue" && state == 3) {
+            constructLog("Account test failed", "PSU Auth");
+            constructLog("Wrong Semester number", "PSU Auth");
+            win.capturePage(function handleCapture(img) {
+              fs.writeFile("./screenshots/error.png", img.toPng(), function(err){
+                if(err) {
+                        return console.log(err);
+                    }
+                    constructLog("Error screenshot taken, stored in program's folder", "general");
+              });
+            });
+            buttonState("restore");
+            win.close();
+            return;
+        }
+        switch (state) {
+            case 1:
+                console.log(win.webContents.getTitle());
+                win.webContents.executeJavaScript("document.querySelector('#login').value = '"+psuid+"';");
+                win.webContents.executeJavaScript("document.querySelector('#password').value = '"+psupass+"';");
+                win.webContents.executeJavaScript("document.querySelector('input[type=\"submit\"]').click()");
+                state++;
+                break;
+            case 2:
+                console.log(win.webContents.getTitle());
+                win.webContents.executeJavaScript("document.querySelector('input[id=\"radio1 @ "+semester+"\"]').click()");
+                win.webContents.executeJavaScript("document.querySelector('input[type=\"SUBMIT\"]').click()");
+                state++;
+                break;
+            case 3:
+                 constructLog("Successfully logged in", "PSU Auth")
+                constructLog("Tests passed", "PSU Auth")
+                win.close();
+                callback();
+                break;
+            default:
+                break;
+        }
+    });
 };
 function searchKeyPress(e) {
     // look for window.event in case event isn't passed in

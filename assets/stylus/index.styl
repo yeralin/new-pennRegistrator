@@ -15,6 +15,16 @@
 	justify-content center
 	align-items center
 
+.semester
+	display flex
+	flex-direction row
+	align-items center
+	p.label
+		margin-right 20px
+	.radio
+		margin-right 5px
+		align-items center
+		display flex
 p
 	color #FFF
 
@@ -81,6 +91,12 @@ p.emailEnd
 		-webkit-app-region no-drag
 		margin 0
 		padding 0 5px
+	&::-webkit-scrollbar
+		width 0px
+	&::-webkit-scrollbar-thumb
+		background #32343F
+	&::-webkit-scrollbar-track
+		background #32343F
 		
 input, button
 	-webkit-app-region no-drag

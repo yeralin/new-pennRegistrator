@@ -42,38 +42,69 @@ var testMailConnection = function(callback) {
 };
 
 var testPennStateAccount = function(callback) {
-    vo(function * () {
-        constructLog("Started PSU Auth testing...", "general");
-        var nightmare = Nightmare({
-            show: false
-        });
-        var link = yield nightmare
-            .goto('https://webaccess.psu.edu/')
-            .type('#login', psuid)
-            .type('#password', psupass)
-            .click('input[type="submit"]')
-            .wait("#alert")
-            .exists("#access-links-logout");
-
-        if (link) {
-            constructLog("Successfully logged in", "PSU Auth")
-            constructLog("Tests passed", "PSU Auth")
-            yield nightmare.end();
-            callback();
-
-        } else {
-            buttonState("restore");
-            constructLog("Account test failed, check you Penn State Accound credentials.", "PSU Auth");
-            constructLog("Taking screenshoot...", "PSU Auth")
-            yield nightmare.screenshot("error " + Date() + ".png");
-            constructLog("Screenshoot is in the program's folder", "PSU Auth");
-            yield nightmare.end();
-        }
-
-        return link;
-    })(function(err, result) {
-        if (err) return console.log(err);
-        
+    var state = 1;
+    var win = new BrowserWindow({
+        show: false
+    });
+    win.on('closed', function() {
+        win = null;
     });
 
+    constructLog("Started PSU Auth testing...", "general");
+    win.loadUrl('https://elionvw.ais.psu.edu/cgi-bin/elion-student.exe/submit/goRegistration');
+    win.webContents.on('did-finish-load', function() {
+        if (win.webContents.getTitle() == "Penn State WebAccess Secure Login: Authentication Required") {
+            constructLog("Account test failed", "PSU Auth");
+            constructLog("Wrong PSU Login/Password", "PSU Auth");
+            win.capturePage(function handleCapture(img) {
+              fs.writeFile("./error.png", img.toPng(), function(err){
+                if(err) {
+                        return console.log(err);
+                    }
+                    constructLog("Error screenshot taken, stored in program's folder", "general");
+              });
+            });
+            buttonState("restore");
+            win.close();
+            return;
+        }
+        else if(win.webContents.getTitle() !=  "Re-enter Password to Continue" && state == 3) {
+            constructLog("Account test failed", "PSU Auth");
+            constructLog("Wrong Semester number", "PSU Auth");
+            win.capturePage(function handleCapture(img) {
+              fs.writeFile("./screenshots/error.png", img.toPng(), function(err){
+                if(err) {
+                        return console.log(err);
+                    }
+                    constructLog("Error screenshot taken, stored in program's folder", "general");
+              });
+            });
+            buttonState("restore");
+            win.close();
+            return;
+        }
+        switch (state) {
+            case 1:
+                console.log(win.webContents.getTitle());
+                win.webContents.executeJavaScript("document.querySelector('#login').value = '"+psuid+"';");
+                win.webContents.executeJavaScript("document.querySelector('#password').value = '"+psupass+"';");
+                win.webContents.executeJavaScript("document.querySelector('input[type=\"submit\"]').click()");
+                state++;
+                break;
+            case 2:
+                console.log(win.webContents.getTitle());
+                win.webContents.executeJavaScript("document.querySelector('input[id=\"radio1 @ "+semester+"\"]').click()");
+                win.webContents.executeJavaScript("document.querySelector('input[type=\"SUBMIT\"]').click()");
+                state++;
+                break;
+            case 3:
+                 constructLog("Successfully logged in", "PSU Auth")
+                constructLog("Tests passed", "PSU Auth")
+                win.close();
+                callback();
+                break;
+            default:
+                break;
+        }
+    });
 };
