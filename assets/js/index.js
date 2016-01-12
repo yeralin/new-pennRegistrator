@@ -75,57 +75,61 @@ var startRegister = function() {
     constructLog("Found course number: " + courseNum, "register");
     constructLog("Registration started...", "register");
     win.loadUrl('https://elionvw.ais.psu.edu/cgi-bin/elion-student.exe/submit/goRegistration');
-    win.webContents.session.clearCache(function() {
-        win.webContents.session.clearStorageData(function() {
-            win.webContents.on('did-finish-load', function() {
-                if (win.webContents.getTitle() == "Penn State WebAccess Secure Login: Authentication Required") {
-                    constructLog("Wrong PSU Login/Password", "PSU Auth");
-                    win.show();
-                    return;
-                }
-                if (state === 5) {
-                    if(dropOption){
-                        win.webContents.executeJavaScript("document.querySelector('input[value=\"N\"]').click()");
-                        win.webContents.executeJavaScript("document.querySelector('input[type=\"SUBMIT\"]').click()");
-                        constructLog("Task is done", "register")
-                        win.show();
-                        return;
-                    }
-                    constructLog("Task is done", "register")
-                    win.show();
-                    return;
-                }
-                switch (state) {
-                    case 1:
-
-                        win.webContents.executeJavaScript("document.querySelector('#login').value = '" + psuid + "';");
-                        win.webContents.executeJavaScript("document.querySelector('#password').value = '" + psupass + "';");
-                        win.webContents.executeJavaScript("document.querySelector('input[type=\"submit\"]').click()");
-                        state++;
-                        break;
-                    case 2:
-
-                        win.webContents.executeJavaScript("document.querySelector('input[id=\"radio1 @ " + semester + "\"]').click()");
-                        win.webContents.executeJavaScript("document.querySelector('input[type=\"SUBMIT\"]').click()");
-                        state++;
-                        break;
-                    case 3:
-
-                        win.webContents.executeJavaScript("document.querySelector('input[type=\"password\"]').value = '" + psupass + "';");
-                        win.webContents.executeJavaScript("document.querySelector('input[type=\"SUBMIT\"]').click()");
-                        state++;
-                        break;
-                    case 4:
-
-                        win.webContents.executeJavaScript("document.querySelector('input[value=\"\"]').value = '" + courseNum + "';");
-                        win.webContents.executeJavaScript("document.querySelector('input[value=\"Add course to schedule\"]').click()");
-                        state++;
-                        break;
-                    default:
-                        break;
-                }
-            });
+    win.webContents.session.cookies.remove("https://elionvw.ais.psu.edu/cgi-bin/elion-student.exe/submit/goRegistration", "pageKey",
+        function(error) {
+            if (error) throw error;
         });
+    win.webContents.session.cookies.remove("https://elionvw.ais.psu.edu/cgi-bin/elion-student.exe/submit/goRegistration", "sessionKey",
+        function(error) {
+            if (error) throw error;
+        });
+    win.webContents.on('did-finish-load', function() {
+        if (win.webContents.getTitle() == "Penn State WebAccess Secure Login: Authentication Required") {
+            constructLog("Wrong PSU Login/Password", "PSU Auth");
+            win.show();
+            return;
+        }
+        if (state === 5) {
+            if (dropOption) {
+                win.webContents.executeJavaScript("document.querySelector('input[value=\"N\"]').click()");
+                win.webContents.executeJavaScript("document.querySelector('input[type=\"SUBMIT\"]').click()");
+                constructLog("Task is done", "register")
+                win.show();
+                return;
+            }
+            constructLog("Task is done", "register")
+            win.show();
+            return;
+        }
+        switch (state) {
+            case 1:
+
+                win.webContents.executeJavaScript("document.querySelector('#login').value = '" + psuid + "';");
+                win.webContents.executeJavaScript("document.querySelector('#password').value = '" + psupass + "';");
+                win.webContents.executeJavaScript("document.querySelector('input[type=\"submit\"]').click()");
+                state++;
+                break;
+            case 2:
+
+                win.webContents.executeJavaScript("document.querySelector('input[id=\"radio1 @ " + semester + "\"]').click()");
+                win.webContents.executeJavaScript("document.querySelector('input[type=\"SUBMIT\"]').click()");
+                state++;
+                break;
+            case 3:
+
+                win.webContents.executeJavaScript("document.querySelector('input[type=\"password\"]').value = '" + psupass + "';");
+                win.webContents.executeJavaScript("document.querySelector('input[type=\"SUBMIT\"]').click()");
+                state++;
+                break;
+            case 4:
+
+                win.webContents.executeJavaScript("document.querySelector('input[value=\"\"]').value = '" + courseNum + "';");
+                win.webContents.executeJavaScript("document.querySelector('input[value=\"Add course to schedule\"]').click()");
+                state++;
+                break;
+            default:
+                break;
+        }
     });
 
 };
