@@ -1,183 +1,3 @@
-@font-face {
-  font-family: GothamNarrowLight;
-  font-style: normal;
-  src: url("../fonts/gotham-light.otf") format("opentype");
-  -webkit-font-smoothing: antialiased!important;
-  text-rendering: optimizeLegibility;
-}
-
-* {
-  font-family: GothamNarrowLight;
-  font-size: 15px;
-}
-
-.loginBlock {
-  -webkit-box-orient: vertical;
-  -moz-box-orient: vertical;
-  -o-box-orient: vertical;
-  -webkit-flex-direction: column;
-  -ms-flex-direction: column;
-  flex-direction: column;
-  -webkit-box-pack: center;
-  -moz-box-pack: center;
-  -o-box-pack: center;
-  -ms-flex-pack: center;
-  -webkit-justify-content: center;
-  justify-content: center;
-}
-
-.loginBlock,
-.semester {
-  display: -moz-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-align: center;
-  -moz-box-align: center;
-  -o-box-align: center;
-  -ms-flex-align: center;
-  -webkit-align-items: center;
-  align-items: center;
-}
-
-.semester {
-  -webkit-box-orient: horizontal;
-  -moz-box-orient: horizontal;
-  -o-box-orient: horizontal;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-}
-
-.semester p.label {
-  margin-right: 20px;
-}
-
-.semester .radio {
-  margin-right: 5px;
-  -webkit-box-align: center;
-  -moz-box-align: center;
-  -o-box-align: center;
-  -ms-flex-align: center;
-  -webkit-align-items: center;
-  align-items: center;
-  display: -moz-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-}
-
-p {
-  color: #fff;
-}
-
-p.title {
-  margin: 25px auto 0;
-  width: 170px;
-}
-
-p.error {
-  margin: 5px auto;
-  width: 175px;
-  height: 10px;
-  color: #e74c3c;
-}
-
-p.emailEnd {
-  position: absolute;
-  right: 30px;
-  top: 205px;
-}
-
-.top-frame {
-  -webkit-app-region: no-drag;
-  position: relative;
-  height: 25px;
-  background-color: #32343f;
-}
-
-.top-frame .dragable {
-  height: 100%;
-  width: 88%;
-  -webkit-app-region: drag;
-}
-
-.top-frame a.close {
-  color: #777;
-  height: 100%;
-  position: absolute;
-  font-size: 17px;
-  right: 10px;
-  text-decoration: none;
-  top: 3px;
-  cursor: default;
-}
-
-.top-frame a.close:after {
-  content: 'x';
-}
-
-.top-frame a.minimize {
-  color: #777;
-  height: 100%;
-  position: absolute;
-  font-size: 30px;
-  right: 30px;
-  text-decoration: none;
-  top: -4px;
-  cursor: default;
-}
-
-.top-frame a.minimize:after {
-  content: '-';
-}
-
-.logWindow {
-  overflow-y: scroll;
-  overflow-x: hidden;
-  border-top-style: solid;
-  border-top-width: 1px;
-  border-top-color: #d0cfcf;
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 150px;
-  background-color: #32343f;
-}
-
-.logWindow p {
-  -webkit-app-region: no-drag;
-  margin: 0;
-  padding: 0 5px;
-}
-
-.logWindow::-webkit-scrollbar {
-  width: 0;
-}
-
-.logWindow::-webkit-scrollbar-thumb {
-  background: #32343f;
-}
-
-.logWindow::-webkit-scrollbar-track {
-  background: #32343f;
-}
-
-input,
-button {
-  -webkit-app-region: no-drag;
-}
-
-html {
-  overflow: hidden;
-  background-color: #2d2f39;
-}
-
-html body {
-  margin: 0;
-  -webkit-app-region: drag;
-}
 * {
   box-sizing: border-box;
 }
@@ -376,4 +196,216 @@ button.stop:before {
   background-color: #3e4a89!important;
   border-bottom: 5px solid #38416e;
   text-shadow: 0 -2px #38416e;
+}
+@font-face {
+  font-family: GothamNarrowLight;
+  font-style: normal;
+  src: url("../fonts/gotham-light.otf") format("opentype");
+  -webkit-font-smoothing: antialiased!important;
+  text-rendering: optimizeLegibility;
+}
+
+* {
+  font-family: GothamNarrowLight;
+  font-size: 15px;
+}
+
+.loginBlock {
+  -webkit-box-orient: vertical;
+  -moz-box-orient: vertical;
+  -o-box-orient: vertical;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-pack: center;
+  -moz-box-pack: center;
+  -o-box-pack: center;
+  -ms-flex-pack: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+}
+
+.loginBlock,
+.semester {
+  display: -moz-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -moz-box-align: center;
+  -o-box-align: center;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  align-items: center;
+}
+
+.semester {
+  -webkit-box-orient: horizontal;
+  -moz-box-orient: horizontal;
+  -o-box-orient: horizontal;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+}
+
+.semester p.label {
+  margin-right: 20px;
+}
+
+.semester .radio {
+  margin-right: 5px;
+  -webkit-box-align: center;
+  -moz-box-align: center;
+  -o-box-align: center;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  align-items: center;
+  display: -moz-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+p {
+  color: #fff;
+}
+
+p.title {
+  margin: 25px auto 0;
+  width: 170px;
+}
+
+p.error {
+  margin: 5px auto;
+  width: 175px;
+  height: 10px;
+  color: #e74c3c;
+}
+
+p.emailEnd {
+  top: 205px;
+}
+
+p.emailEnd,
+.time {
+  position: absolute;
+  right: 30px;
+}
+
+.time {
+  top: 375px;
+}
+
+.dropOption {
+  height: 15px;
+  display: -moz-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -moz-box-orient: horizontal;
+  -o-box-orient: horizontal;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-align: center;
+  -moz-box-align: center;
+  -o-box-align: center;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  align-items: center;
+}
+
+.dropOption #drop {
+  margin-left: 10px;
+}
+
+.top-frame {
+  -webkit-app-region: no-drag;
+  position: relative;
+  height: 25px;
+  background-color: #32343f;
+}
+
+.top-frame .dragable {
+  height: 100%;
+  width: 88%;
+  -webkit-app-region: drag;
+}
+
+.top-frame a.close {
+  color: #777;
+  height: 100%;
+  position: absolute;
+  font-size: 17px;
+  right: 10px;
+  text-decoration: none;
+  top: 3px;
+  cursor: default;
+}
+
+.top-frame a.close:after {
+  content: 'x';
+}
+
+.top-frame a.minimize {
+  color: #777;
+  height: 100%;
+  position: absolute;
+  font-size: 30px;
+  right: 30px;
+  text-decoration: none;
+  top: -4px;
+  cursor: default;
+}
+
+.top-frame a.minimize:after {
+  content: '-';
+}
+
+.logWindow {
+  overflow-y: scroll;
+  overflow-x: hidden;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #d0cfcf;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 150px;
+  background-color: #32343f;
+}
+
+.logWindow p {
+  -webkit-app-region: no-drag;
+  margin: 0;
+  padding: 0 5px;
+}
+
+.logWindow::-webkit-scrollbar {
+  width: 0;
+}
+
+.logWindow::-webkit-scrollbar-thumb {
+  background: #32343f;
+}
+
+.logWindow::-webkit-scrollbar-track {
+  background: #32343f;
+}
+
+input,
+button {
+  -webkit-app-region: no-drag;
+}
+
+html {
+  overflow: hidden;
+  background-color: #2d2f39;
+}
+
+html body {
+  margin: 0;
+  -webkit-app-region: drag;
 }
