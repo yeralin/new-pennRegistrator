@@ -90,28 +90,12 @@ var startRegister = function() {
     win.webContents.on('did-finish-load', function() {
         if (win.webContents.getTitle() == "Penn State WebAccess Secure Login: Authentication Required") {
             constructLog("Wrong PSU Login/Password", "PSU Auth");
-            win.capturePage(function handleCapture(img) {
-                fs.writeFile("./screenshots/error.png", img.toPng(), function(err) {
-                    if (err) {
-                        return console.log(err);
-                    }
-                    constructLog("Error screenshot taken, stored in program's folder", "general");
-                });
-            });
-            win.close();
+            win.show();
             return;
         }
         if (state === 5) {
             constructLog("Task is done", "register")
-           win.capturePage(function handleCapture(img) {
-                fs.writeFile("./screenshots/registration.png", img.toPng(), function(err) {
-                    if (err) {
-                        return console.log(err);
-                    }
-                    constructLog("Registration screenshot taken, stored in program's folder", "general");
-                });
-            });
-            win.close();
+            win.show();
             return;
         }
         switch (state) {

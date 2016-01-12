@@ -106,28 +106,12 @@ var startRegister = function() {
     win.webContents.on('did-finish-load', function() {
         if (win.webContents.getTitle() == "Penn State WebAccess Secure Login: Authentication Required") {
             constructLog("Wrong PSU Login/Password", "PSU Auth");
-            win.capturePage(function handleCapture(img) {
-                fs.writeFile("./screenshots/error.png", img.toPng(), function(err) {
-                    if (err) {
-                        return console.log(err);
-                    }
-                    constructLog("Error screenshot taken, stored in program's folder", "general");
-                });
-            });
-            win.close();
+            win.show();
             return;
         }
         if (state === 5) {
             constructLog("Task is done", "register")
-           win.capturePage(function handleCapture(img) {
-                fs.writeFile("./screenshots/registration.png", img.toPng(), function(err) {
-                    if (err) {
-                        return console.log(err);
-                    }
-                    constructLog("Registration screenshot taken, stored in program's folder", "general");
-                });
-            });
-            win.close();
+            win.show();
             return;
         }
         switch (state) {
@@ -251,31 +235,15 @@ var testPennStateAccount = function(callback) {
         if (win.webContents.getTitle() == "Penn State WebAccess Secure Login: Authentication Required") {
             constructLog("Account test failed", "PSU Auth");
             constructLog("Wrong PSU Login/Password", "PSU Auth");
-            win.capturePage(function handleCapture(img) {
-              fs.writeFile("./error.png", img.toPng(), function(err){
-                if(err) {
-                        return console.log(err);
-                    }
-                    constructLog("Error screenshot taken, stored in program's folder", "general");
-              });
-            });
+            win.show();
             buttonState("restore");
-            win.close();
             return;
         }
         else if(win.webContents.getTitle() !=  "Re-enter Password to Continue" && state == 3) {
             constructLog("Account test failed", "PSU Auth");
             constructLog("Wrong Semester number", "PSU Auth");
-            win.capturePage(function handleCapture(img) {
-              fs.writeFile("./screenshots/error.png", img.toPng(), function(err){
-                if(err) {
-                        return console.log(err);
-                    }
-                    constructLog("Error screenshot taken, stored in program's folder", "general");
-              });
-            });
+            win.show();
             buttonState("restore");
-            win.close();
             return;
         }
         switch (state) {
@@ -293,6 +261,7 @@ var testPennStateAccount = function(callback) {
                 state++;
                 break;
             case 3:
+                win.show();
                  constructLog("Successfully logged in", "PSU Auth")
                 constructLog("Tests passed", "PSU Auth")
                 win.close();
